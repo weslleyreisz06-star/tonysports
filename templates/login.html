@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div style="max-width: 400px; margin: 100px auto; text-align: center; padding: 20px;">
+        <h2 class="logo-text" style="margin-bottom: 30px;">ACESSO RESTRITO</h2>
+        <form method="POST" class="admin-panel">
+            <input type="password" name="password" class="form-control" placeholder="Senha Admin" required>
+            <button type="submit" class="btn btn-primary" style="width:100%">ENTRAR</button>
+        </form>
+        <a href="/" style="color: #666; display: block; margin-top: 20px;">Voltar ao site</a>
+    </div>
+</body>
+</html>

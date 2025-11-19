@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tony Sports | Loja</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="logo-container">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="TS" class="logo-img">
+                <span class="logo-text">Tony Sports</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">LOJA</a>
+                <a href="/sobre">SOBRE</a>
+                <a href="/login"><i class="fas fa-lock"></i> ADMIN</a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div class="hero">
+        <h1>VISTA A SUA PAIXÃO</h1>
+        <p>Artigos esportivos premium. Estilo e performance.</p>
+    </div>
+    
+    <div class="container">
+        <div class="category-scroll">
+            <a href="/" class="chip {% if not active_cat %}active{% endif %}">Todos</a>
+            <a href="/?category=Camisas" class="chip {% if active_cat == 'Camisas' %}active{% endif %}">Camisas</a>
+            <a href="/?category=Bermudas" class="chip {% if active_cat == 'Bermudas' %}active{% endif %}">Bermudas</a>
+            <a href="/?category=Tenis" class="chip {% if active_cat == 'Tenis' %}active{% endif %}">Tênis</a>
+            <a href="/?category=Acessorios" class="chip {% if active_cat == 'Acessorios' %}active{% endif %}">Acessórios</a>
+        </div>
+        
+        <div class="grid">
+            {% for product in products %}
+            <div class="card">
+                <div class="card-img-wrapper"><img src="{{ url_for('static', filename='uploads/' + product.image) }}" class="card-img"></div>
+                <div class="card-body">
+                    <span style="color:#888; font-size:0.8rem">{{ product.category }}</span>
+                    <h3 class="card-title">{{ product.name }}</h3>
+                    <div class="card-price">R$ {{ "%.2f"|format(product.price) }}</div>
+                    <div class="btn-group">
+                        <a href="https://wa.me/553597444530?text=Olá Tony Sports! Tenho interesse em: *{{ product.name }}*" target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> COMPRAR</a>
+                        <a href="https://instagram.com/tony_sports00" target="_blank" class="btn btn-outline"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    
+    <div class="social-bar">
+        <h3 class="social-title">FALE CONOSCO</h3>
+        <div class="social-icons">
+            <a href="https://wa.me/553597444530" target="_blank" class="social-btn sb-whatsapp">
+                <i class="fab fa-whatsapp"></i> (35) 9744-4530
+            </a>
+            <a href="https://instagram.com/tony_sports00" target="_blank" class="social-btn sb-insta">
+                <i class="fab fa-instagram"></i> @tony_sports00
+            </a>
+        </div>
+    </div>
+
+
+    <footer><p>© 2025 TONY SPORTS. TODOS OS DIREITOS RESERVADOS.</p></footer>
+</body>
+</html>

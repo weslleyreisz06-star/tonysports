@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre | Tony Sports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="logo-container">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="TS" class="logo-img">
+                <span class="logo-text">Tony Sports</span>
+            </a>
+            <div class="nav-links">
+                <a href="/">LOJA</a>
+                <a href="/sobre">SOBRE</a>
+                <a href="/login"><i class="fas fa-lock"></i> ADMIN</a>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="about-section">
+            <div class="about-text">
+                <h2>NOSSA HISTÓRIA</h2>
+                <p>A <strong>Tony Sports</strong> nasceu de uma paixão incontrolável pelo esporte e pela moda. Fundada com o objetivo de trazer o que há de mais moderno no mundo esportivo para nossos clientes, nossa missão é garantir qualidade, estilo e autenticidade.</p>
+                <p>Sabemos que vestir a camisa do seu time ou usar aquele tênis especial não é apenas sobre roupa, é sobre identidade. Por isso, selecionamos cada peça do nosso catálogo com rigor máximo de qualidade.</p>
+                <p>Seja no campo, na quadra ou na rua, a Tony Sports está com você. Qualidade premium para quem respira esporte.</p>
+                
+                <div style="margin-top: 30px;">
+                    <a href="/" class="btn btn-primary" style="display:inline-flex;">VER PRODUTOS</a>
+                </div>
+            </div>
+            
+            <div class="about-img-wrapper">
+                <img src="{{ url_for('static', filename='img/sobre.png') }}" alt="Fundador Conceito" class="about-img">
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="social-bar">
+        <h3 class="social-title">FALE CONOSCO</h3>
+        <div class="social-icons">
+            <a href="https://wa.me/553597444530" target="_blank" class="social-btn sb-whatsapp">
+                <i class="fab fa-whatsapp"></i> (35) 9744-4530
+            </a>
+            <a href="https://instagram.com/tony_sports00" target="_blank" class="social-btn sb-insta">
+                <i class="fab fa-instagram"></i> @tony_sports00
+            </a>
+        </div>
+    </div>
+
+
+    <footer><p>© 2025 TONY SPORTS. TODOS OS DIREITOS RESERVADOS.</p></footer>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Tony Sports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav><div class="nav-content"><span class="logo-text">Painel Admin</span><a href="/" style="color:white;">Voltar</a></div></nav>
+    <div class="container" style="max-width: 600px; margin-top: 40px;">
+        <h2>Cadastrar Produto</h2>
+        <form method="POST" enctype="multipart/form-data" class="admin-panel">
+            <input type="text" name="name" class="form-control" placeholder="Nome do Produto" required>
+            <select name="category" class="form-control" required>
+                <option value="Camisas">Camisas</option>
+                <option value="Bermudas">Bermudas</option>
+                <option value="Tenis">Tênis</option>
+                <option value="Acessorios">Acessórios</option>
+            </select>
+            <input type="number" step="0.01" name="price" class="form-control" placeholder="Preço" required>
+            <input type="file" name="image" class="form-control" accept="image/*" required>
+            <button type="submit" class="btn btn-primary" style="width:100%">PUBLICAR</button>
+        </form>
+        <h3 style="margin-top: 40px;">Ativos</h3>
+        {% for product in products %}
+        <div style="display:flex; justify-content:space-between; background:#151515; padding:15px; margin-bottom:10px; border-radius:8px;">
+            <span style="color:white;">{{ product.name }}</span>
+            <a href="{{ url_for('delete', id=product.id) }}" style="color:#ff4444;">Excluir</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

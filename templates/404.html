@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada | Tony Sports</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .error-container { text-align: center; padding: 100px 20px; }
+        .error-code { font-size: 6rem; font-family: 'Oswald', sans-serif; color: #333; line-height: 1; }
+        .error-msg { font-size: 1.5rem; color: white; margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="logo-container">
+                <span class="logo-text">Tony Sports</span>
+            </a>
+        </div>
+    </nav>
+    <div class="error-container">
+        <h1 class="error-code">404</h1>
+        <p class="error-msg">Ops! Essa jogada foi pra fora.</p>
+        <p style="color: #888; margin-bottom: 30px;">A página que você procura não existe.</p>
+        <a href="/" class="btn btn-primary">VOLTAR AO JOGO</a>
+    </div>
+</body>
+</html>
