@@ -63,3 +63,37 @@ footer { text-align: center; padding: 40px 20px; color: var(--text-muted); font-
     .about-section { grid-template-columns: 1fr; }
     .nav-links { display: none; } /* Mobile menu simplificado */
 }
+
+
+/* --- CORREÇÃO MOBILE --- */
+/* Oculta os links por padrão na versão Desktop */
+.nav-links { display: flex; gap: 20px; align-items: center; } 
+.menu-toggle { display: none; background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+
+@media (max-width: 768px) {
+    /* Mostra o botão de menu (hamburguer) */
+    .menu-toggle { display: block; }
+    
+    /* Esconde a navegação completa */
+    .nav-links {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        top: 75px; /* Altura do header */
+        left: 0;
+        width: 100%;
+        background: #0a0a0a; 
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 20px 0;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    }
+    .nav-links.active {
+        display: flex; /* Exibe ao clicar */
+    }
+    .nav-links a {
+        width: 100%;
+        padding: 15px 20px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}

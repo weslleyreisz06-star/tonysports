@@ -15,5 +15,19 @@
         </form>
         <a href="/" style="color: #666; display: block; margin-top: 20px;">Voltar ao site</a>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButton = document.getElementById('menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (toggleButton && navLinks) {
+            toggleButton.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+    });
+</script>
+
 </body>
 </html>
