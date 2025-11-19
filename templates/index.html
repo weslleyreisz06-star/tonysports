@@ -16,7 +16,7 @@
                 <span class="logo-text">Tony Sports</span>
             </a>
             <button class="menu-toggle" id="menu-toggle"><i class="fas fa-bars"></i></button>
-<div class="nav-links">
+            <div class="nav-links">
                 <a href="/">LOJA</a>
                 <a href="/sobre">SOBRE</a>
                 <a href="/login"><i class="fas fa-lock"></i> ADMIN</a>
@@ -42,7 +42,9 @@
         <div class="grid">
             {% for product in products %}
             <div class="card">
-                <div class="card-img-wrapper"><img src="{{ url_for('static', filename='uploads/' + product.image) }}" class="card-img"></div>
+                <div class="card-img-wrapper">
+                    <img src="data:image/jpeg;base64,{{ product.image }}" alt="{{ product.name }}" class="card-img">
+                </div>
                 <div class="card-body">
                     <span style="color:#888; font-size:0.8rem">{{ product.category }}</span>
                     <h3 class="card-title">{{ product.name }}</h3>
@@ -87,4 +89,5 @@
 </script>
 
 </body>
-</html>
+                </html>
+            
