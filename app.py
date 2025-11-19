@@ -1,49 +1,50 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-# Importar psycopg2 é bom para garantir que o Flask-SQLAlchemy o utilize
-try:
-    import psycopg2
-except ImportError:
-    pass
 
+# --- CONFIGURAÇÃO DE AMBIENTE E SEGURANÇA ---
 app = Flask(__name__)
+# Chave de segurança para assinar os cookies
 app.secret_key = 'tony_sports_key_secure_2025_final'
 
 # CONFIGURAÇÕES DE SEGURANÇA
 app.config['SESSION_COOKIE_HTTPONLY'] = True 
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' 
 
+# CONFIGURAÇÃO DE ARMAZENAMENTO DE IMAGENS PERSISTENTE NO RENDER
+# O Render precisa montar o disco neste EXATO caminho:
+PERSISTENT_UPLOAD_PATH = '/var/data/tonysports_uploads'
+app.config['UPLOAD_FOLDER'] = PERSISTENT_UPLOAD_PATH
+# A URL base para as imagens deve ser '/uploads/'
+IMAGE_URL_BASE = '/uploads/'
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-app.config['UPLOAD_FOLDER'] = os.path.join(BASE_DIR, 'static/uploads')
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 
 
+# Cria a pasta de uploads persistente (se não existir, o Render cria no deploy)
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
-    os.makedirs(app.config['UPLOAD_FOLDER'])
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# --- CONFIGURAÇÃO DE BANCO DE DADOS PARA PRODUÇÃO/DEVELOPMENT ---
-# 1. Tenta usar a URL de conexão do PostgreSQL (host, Railway, Render)
+# --- CONFIGURAÇÃO DE BANCO DE DADOS ---
+# Tenta usar a URL de conexão do PostgreSQL (DATABASE_URL)
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
 if DATABASE_URL:
-    # A biblioteca Flask-SQLAlchemy requer que a string de conexão 'postgres://' 
-    # seja reescrita para 'postgresql://'
+    # Corrige a sintaxe para o SQLAlchemy (postgres:// -> postgresql://)
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
     
     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
-    print("Conectando ao PostgreSQL de Produção.")
 else:
-    # 2. Se não houver DATABASE_URL, usa o SQLite local para desenvolvimento
+    # Se não houver DATABASE_URL, usa o SQLite local para desenvolvimento
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(BASE_DIR, 'tony.db')
-    print("Conectando ao SQLite de Desenvolvimento.")
 
 db = SQLAlchemy(app)
 
 # A senha real é: Pristony22@
-ADMIN_HASH = 'scrypt:32768:8:1$mQ69t2dS6yDX5Aev$77871968d46455359879a39ba22c649ebb4a0be35d2f043e1ebcabe6b8e469886d9c0bf8d1b34d6fddad2778e9e7a988bfc8ae42debd96b9c1afea9c4d7684c4'
+ADMIN_HASH = generate_password_hash('Pristony22@')
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,16 +54,22 @@ class Product(db.Model):
     image = db.Column(db.String(100), nullable=False)
 
 with app.app_context():
-    db.create_all() # Isso cria as tabelas no DB configurado (SQLite ou Postgres)
+    db.create_all()
 
-# --- MIDDLEWARE E ROTAS (O restante do código é o mesmo) ---
-
+# --- MIDDLEWARE DE SEGURANÇA (HEADERS) ---
 @app.after_request
 def add_security_headers(response):
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN' 
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-Content-Type-Options'] = 'nosniff'
     return response
 
+# --- ROTA PARA SERVIR IMAGENS DO DISCO PERSISTENTE (NOVA ROTA) ---
+@app.route(f'{IMAGE_URL_BASE.rstrip("/")}/<filename>')
+def uploaded_file(filename):
+    # Usa send_from_directory para servir arquivos do disco persistente
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+# --- ROTAS DA APLICAÇÃO ---
 @app.route('/')
 def index():
     category_filter = request.args.get('category')
@@ -82,7 +89,7 @@ def login():
         password = request.form['password']
         if check_password_hash(ADMIN_HASH, password):
             session['admin'] = True
-            session.modified = True 
+            session.modified = True
             return redirect(url_for('admin'))
         else:
             flash('Senha ou acesso negado.', 'error')
@@ -96,7 +103,9 @@ def admin():
         file = request.files['image']
         if file:
             filename = secure_filename(file.filename)
+            # SALVA NO DISCO PERSISTENTE MONTADO:
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            
             new_prod = Product(name=request.form['name'], category=request.form['category'], price=float(request.form['price']), image=filename)
             db.session.add(new_prod)
             db.session.commit()
@@ -109,6 +118,7 @@ def admin():
 def delete(id):
     if session.get('admin'):
         prod = Product.query.get(id)
+        # Opcional: Adicionar lógica para deletar a imagem do disco
         db.session.delete(prod)
         db.session.commit()
     return redirect(url_for('admin'))
@@ -128,3 +138,4 @@ def internal_error(e):
 
 if __name__ == '__main__':
     app.run(debug=True)
+        
